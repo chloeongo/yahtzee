@@ -1,0 +1,50 @@
+body {
+  background-color: #fffecb;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .Btn {
+    width: 25rem;
+    height: 7rem;
+  }
+  #main {
+    margin-left: 1.4rem;
+    align-items: center;
+  }
+}
+
+p {
+  font-family: "Cabin";
+  color: aliceblue;
+}
+
+h1 {
+  font-family: "Cabin";
+  color: #423e3b;
+  font-size: 8rem;
+  text-align: center;
+}
+
+.Btn {
+  background-color: #fea82f;
+  border-radius: 30px;
+  padding: 2px;
+  width: 25%;
+  height: 5%;
+  margin: 1.5em;
+}
+
+.Btn:hover {
+  background-color: #f2920b;
+}
+
+.Btn p {
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+#main {
+  display: flex;
+  justify-content: center;
+}
