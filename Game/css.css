@@ -10,3 +10,8 @@ header {
   display: flex;
   justify-content: space-evenly;
 }
+
+header img {
+  width: 45px;
+  height: auto;
+}
