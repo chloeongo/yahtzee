@@ -3,19 +3,19 @@ body {
   margin: 0;
 }
 
-main p {
-  font-family: "Fira Sans";
-  color: #242038;
-  text-align: center;
-  font-size: 1.5rem;
-}
-
 header {
   background: #0496ff;
   padding: 15px;
   width: auto;
   display: flex;
   justify-content: space-evenly;
+}
+
+p {
+  font-family: "Fira Sans";
+  color: #242038;
+  text-align: center;
+  font-size: 1.5rem;
 }
 
 header img {

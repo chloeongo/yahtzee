@@ -1,0 +1,12 @@
+body {
+  background-color: #ffbc42;
+  margin: 0;
+}
+
+header {
+  background: #0496ff;
+  padding: 15px;
+  width: auto;
+  display: flex;
+  justify-content: space-evenly;
+}
