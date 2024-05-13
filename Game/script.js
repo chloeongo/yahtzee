@@ -17,7 +17,6 @@ function throwDices() {
   for (let i = 0; i < diceRolled.length; i++) {
     const diceImgElement = document.getElementById("diceImg" + (i + 1));
     diceImgElement.src = diceRolled[i].image;
-    diceImgElement.alt = "Die " + diceRolled[i].number;
   }
 }
 
