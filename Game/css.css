@@ -21,14 +21,15 @@ main {
   justify-content: center;
 }
 
-#printNumbers {
-  font-family: "Fira Sans";
-  color: #242038;
-  font-size: 1.2rem;
+main img {
+  width: 60px;
+  height: 60px;
+  border: none;
+  padding: 1.2rem;
 }
 
 button {
-  margin-top: 3rem;
+  margin-top: 7rem;
   padding: 1.5rem;
   border: none;
   border-radius: 20px;
