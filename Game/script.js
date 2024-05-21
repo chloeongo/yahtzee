@@ -1,3 +1,8 @@
+let throwCounter = 3;
+
+document.getElementById("amountOfThrows").innerText =
+  "Throws left: " + throwCounter;
+
 function throwDices() {
   const dices = [
     { number: 1, image: "../images/1.png" },
@@ -18,8 +23,15 @@ function throwDices() {
     const diceImgElement = document.getElementById("diceImg" + (i + 1));
     diceImgElement.src = diceRolled[i].image;
   }
+  countThrows();
 }
 
-function throwCount() {
-  document.getElementById("amountOfThrows").innerHTML;
+function countThrows() {
+  if (throwCounter > 0) {
+    throwCounter--;
+    document.getElementById("amountOfThrows").innerText =
+      "Throws left: " + throwCounter;
+  } else {
+    alert("No throws left!");
+  }
 }

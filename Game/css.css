@@ -30,11 +30,22 @@ header img {
   padding: 1.2rem;
 }
 
+#diceImgs img:hover {
+  cursor: pointer;
+}
+
 #diceImgs {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2rem;
   display: table;
+}
+
+#amountOfThrows {
+  font-family: "Fira Sans";
+  color: #242038;
+  font-size: 2rem;
+  text-align: center;
 }
 
 button {
@@ -53,4 +64,5 @@ button {
 
 button:hover {
   background-color: #006ba6;
+  cursor: pointer;
 }
