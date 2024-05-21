@@ -1,5 +1,7 @@
 let throwCounter = 3;
 
+document.getElementById("diceBtn").addEventListener("click", throwDices);
+
 function throwDices() {
   const dices = [
     { number: 1, image: "../images/1.png" },
@@ -28,7 +30,8 @@ function countThrows() {
     throwCounter--;
     document.getElementById("amountOfThrows").innerText =
       "Throws left: " + throwCounter;
-  } else {
-    alert("No throws left!");
+  }
+  if (throwCounter === 0) {
+    document.getElementById("diceBtn").removeEventListener("click", throwDices);
   }
 }
