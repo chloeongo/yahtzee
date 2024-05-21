@@ -1,8 +1,5 @@
 let throwCounter = 3;
 
-document.getElementById("amountOfThrows").innerText =
-  "Throws left: " + throwCounter;
-
 function throwDices() {
   const dices = [
     { number: 1, image: "../images/1.png" },
