@@ -1,2 +1,2 @@
 Two player werkend maken idee.
-Klaar met beurt > klik op "finish move" knop > activeert js code om andere player beurt te geven
+Klaar met beurt > klik op "finish move" knop > activeert js functie om andere player beurt te geven

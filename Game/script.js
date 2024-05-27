@@ -1,6 +1,29 @@
 let throwCounter = 3;
+const heldDices = [false, false, false, false, false];
 
 document.getElementById("diceBtn").addEventListener("click", throwDices);
+
+document.getElementById("diceImg1").addEventListener("click", function (e) {
+  console.log(this.id);
+  this.style = "border: 5px solid black";
+  heldDices == true;
+});
+document.getElementById("diceImg2").addEventListener("click", function (e) {
+  console.log(this.id);
+  this.style = "border: 10px solid black";
+});
+document.getElementById("diceImg3").addEventListener("click", function (e) {
+  console.log(this.id);
+  this.style = "border: 10px solid black";
+});
+document.getElementById("diceImg4").addEventListener("click", function (e) {
+  console.log(this.id);
+  this.style = "border: 10px solid black";
+});
+document.getElementById("diceImg5").addEventListener("click", function (e) {
+  console.log(this.id);
+  this.style = "border: 10px solid black";
+});
 
 function throwDices() {
   const dices = [
@@ -12,15 +35,12 @@ function throwDices() {
     { number: 6, image: "../images/6.png" },
   ];
 
-  const diceRolled = [];
   for (let i = 0; i < 5; i++) {
-    const randomDices = Math.floor(Math.random() * dices.length);
-    diceRolled.push(dices[randomDices]);
-  }
-
-  for (let i = 0; i < diceRolled.length; i++) {
-    const diceImgElement = document.getElementById("diceImg" + (i + 1));
-    diceImgElement.src = diceRolled[i].image;
+    if (!heldDices[i]) {
+      const randomDices = Math.floor(Math.random() * dices.length);
+      const diceImgElement = document.getElementById("diceImg" + (i + 1));
+      diceImgElement.src = dices[randomDices].image;
+    }
   }
   countThrows();
 }
@@ -35,3 +55,5 @@ function countThrows() {
     document.getElementById("diceBtn").removeEventListener("click", throwDices);
   }
 }
+
+function holdDices(e) {}
