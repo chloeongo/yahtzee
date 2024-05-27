@@ -6,23 +6,27 @@ document.getElementById("diceBtn").addEventListener("click", throwDices);
 document.getElementById("diceImg1").addEventListener("click", function (e) {
   console.log(this.id);
   this.style = "border: 5px solid black";
-  heldDices == true;
+  heldDices[0] = true;
 });
 document.getElementById("diceImg2").addEventListener("click", function (e) {
   console.log(this.id);
-  this.style = "border: 10px solid black";
+  this.style = "border: 5px solid black";
+  heldDices[1] = true;
 });
 document.getElementById("diceImg3").addEventListener("click", function (e) {
   console.log(this.id);
-  this.style = "border: 10px solid black";
+  this.style = "border: 5px solid black";
+  heldDices[2] = true;
 });
 document.getElementById("diceImg4").addEventListener("click", function (e) {
   console.log(this.id);
-  this.style = "border: 10px solid black";
+  this.style = "border: 5px solid black";
+  heldDices[3] = true;
 });
 document.getElementById("diceImg5").addEventListener("click", function (e) {
   console.log(this.id);
-  this.style = "border: 10px solid black";
+  this.style = "border: 5px solid black";
+  heldDices[4] = true;
 });
 
 function throwDices() {
