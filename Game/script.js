@@ -41,8 +41,13 @@ function holdDices() {
   function markDiceHeld(heldDicesNumber) {
     return function (e) {
       if (diceRolled) {
-        this.style = "border: 5px solid black";
-        heldDices[heldDicesNumber] = true;
+        if (heldDices[heldDicesNumber]) {
+          this.style = "border: none";
+          heldDices[heldDicesNumber] = false;
+        } else {
+          this.style = "border: 5px solid black";
+          heldDices[heldDicesNumber] = true;
+        }
       }
     };
   }
