@@ -1,35 +1,12 @@
 let throwCounter = 3;
+let diceRolled = false;
 const heldDices = [false, false, false, false, false];
 
 document.getElementById("diceBtn").addEventListener("click", throwDices);
 
-document.getElementById("diceImg1").addEventListener("click", function (e) {
-  console.log(this.id);
-  this.style = "border: 5px solid black";
-  heldDices[0] = true;
-});
-document.getElementById("diceImg2").addEventListener("click", function (e) {
-  console.log(this.id);
-  this.style = "border: 5px solid black";
-  heldDices[1] = true;
-});
-document.getElementById("diceImg3").addEventListener("click", function (e) {
-  console.log(this.id);
-  this.style = "border: 5px solid black";
-  heldDices[2] = true;
-});
-document.getElementById("diceImg4").addEventListener("click", function (e) {
-  console.log(this.id);
-  this.style = "border: 5px solid black";
-  heldDices[3] = true;
-});
-document.getElementById("diceImg5").addEventListener("click", function (e) {
-  console.log(this.id);
-  this.style = "border: 5px solid black";
-  heldDices[4] = true;
-});
-
 function throwDices() {
+  diceRolled = true;
+
   const dices = [
     { number: 1, image: "../images/1.png" },
     { number: 2, image: "../images/2.png" },
@@ -60,4 +37,20 @@ function countThrows() {
   }
 }
 
-function holdDices(e) {}
+function holdDices() {
+  function markDiceHeld(heldDicesNumber) {
+    return function (e) {
+      if (diceRolled) {
+        this.style = "border: 5px solid black";
+        heldDices[heldDicesNumber] = true;
+      }
+    };
+  }
+
+  for (let i = 0; i < 5; i++) {
+    const diceImgElement = document.getElementById("diceImg" + (i + 1));
+    diceImgElement.addEventListener("click", markDiceHeld(i));
+  }
+}
+
+holdDices();
