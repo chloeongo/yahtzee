@@ -52,6 +52,7 @@ button {
   margin-left: auto;
   margin-right: auto;
   display: table;
+  margin-bottom: 3.5rem;
   margin-top: 3rem;
   padding: 1.5rem;
   border: none;
@@ -65,4 +66,31 @@ button {
 button:hover {
   background-color: #006ba6;
   cursor: pointer;
+}
+
+.scoresheet {
+  font-family: "Fira Sans";
+  font-size: 1.5rem;
+  color: #242038;
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 5rem;
+}
+
+.scoreCapital {
+  font-family: "Modak";
+  font-weight: lighter;
+  color: #d81159;
+  font-size: 1.7rem;
+}
+
+table {
+  width: 80%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border: 7px solid #ffc457;
 }
