@@ -26,18 +26,10 @@ function throwDices() {
     }
   }
   countThrows();
-  countOnes(1, 2, 3, 4, 5, 6, rolledNumbers);
+  countTop(1, 2, 3, 4, 5, 6, rolledNumbers);
 }
 
-function countOnes(
-  number1,
-  number2,
-  number3,
-  number4,
-  number5,
-  number6,
-  array
-) {
+function countTop(number1, number2, number3, number4, number5, number6, array) {
   let count1 = 0;
   let count2 = 0;
   let count3 = 0;
@@ -60,7 +52,15 @@ function countOnes(
       count6 = count6 + 6;
     }
   }
+  document.getElementById("scoreInputAces1").innerText = count1;
+  document.getElementById("scoreInputTwos1").innerText = count2;
+  document.getElementById("scoreInputThrees1").innerText = count3;
+  document.getElementById("scoreInputFours1").innerText = count4;
+  document.getElementById("scoreInputFives1").innerText = count5;
+  document.getElementById("scoreInputSixes1").innerText = count6;
+}
 
+function countLow() {
   let threeOfAKind = 0;
   let fourOfAKind = 0;
   let fullHouse = 0;
@@ -69,47 +69,6 @@ function countOnes(
   let yahtzee = 0;
   let chance = array.reduce((a, b) => a + b, 0);
 
-  const counts = [count1, count2, count3, count4, count5, count6];
-
-  for (let i = 0; i < counts.length; i++) {
-    if (counts[i] >= 3) {
-      threeOfAKind = array.reduce((a, b) => a + b, 0); // Sum of all dice
-    }
-    if (counts[i] >= 4) {
-      fourOfAKind = array.reduce((a, b) => a + b, 0); // Sum of all dice
-    }
-    if (counts[i] === 5) {
-      yahtzee = 50;
-    }
-  }
-
-  if (counts.includes(3) && counts.includes(2)) {
-    fullHouse = 25;
-  }
-
-  // Check for small straight (1-2-3-4, 2-3-4-5, or 3-4-5-6)
-  if (
-    (count1 && count2 && count3 && count4) ||
-    (count2 && count3 && count4 && count5) ||
-    (count3 && count4 && count5 && count6)
-  ) {
-    smallStraight = 30;
-  }
-
-  // Check for long straight (1-2-3-4-5 or 2-3-4-5-6)
-  if (
-    (count1 && count2 && count3 && count4 && count5) ||
-    (count2 && count3 && count4 && count5 && count6)
-  ) {
-    longStraight = 40;
-  }
-
-  document.getElementById("scoreInputAces1").innerText = count1;
-  document.getElementById("scoreInputTwos1").innerText = count2;
-  document.getElementById("scoreInputThrees1").innerText = count3;
-  document.getElementById("scoreInputFours1").innerText = count4;
-  document.getElementById("scoreInputFives1").innerText = count5;
-  document.getElementById("scoreInputSixes1").innerText = count6;
   document.getElementById("threeOfAKindScore").innerText = threeOfAKind;
   document.getElementById("fourOfAKindScore").innerText = fourOfAKind;
   document.getElementById("fullHouseScore").innerText = fullHouse;
