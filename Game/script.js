@@ -1,6 +1,7 @@
 let throwCounter = 3;
 let diceRolled = false;
 const heldDices = [false, false, false, false, false];
+let rolledNumbers = [0, 0, 0, 0, 0];
 
 document.getElementById("diceBtn").addEventListener("click", throwDices);
 
@@ -18,12 +19,104 @@ function throwDices() {
 
   for (let i = 0; i < 5; i++) {
     if (!heldDices[i]) {
-      const randomDices = Math.floor(Math.random() * dices.length);
+      const randomIndex = Math.floor(Math.random() * dices.length);
       const diceImgElement = document.getElementById("diceImg" + (i + 1));
-      diceImgElement.src = dices[randomDices].image;
+      diceImgElement.src = dices[randomIndex].image;
+      rolledNumbers[i] = dices[randomIndex].number;
     }
   }
   countThrows();
+  countOnes(1, 2, 3, 4, 5, 6, rolledNumbers);
+}
+
+function countOnes(
+  number1,
+  number2,
+  number3,
+  number4,
+  number5,
+  number6,
+  array
+) {
+  let count1 = 0;
+  let count2 = 0;
+  let count3 = 0;
+  let count4 = 0;
+  let count5 = 0;
+  let count6 = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === number1) {
+      count1++;
+    } else if (array[i] === number2) {
+      count2 = count2 + 2;
+    } else if (array[i] === number3) {
+      count3 = count3 + 3;
+    } else if (array[i] === number4) {
+      count4 = count4 + 4;
+    } else if (array[i] === number5) {
+      count5 = count5 + 5;
+    } else if (array[i] === number6) {
+      count6 = count6 + 6;
+    }
+  }
+
+  let threeOfAKind = 0;
+  let fourOfAKind = 0;
+  let fullHouse = 0;
+  let smallStraight = 0;
+  let longStraight = 0;
+  let yahtzee = 0;
+  let chance = array.reduce((a, b) => a + b, 0);
+
+  const counts = [count1, count2, count3, count4, count5, count6];
+
+  for (let i = 0; i < counts.length; i++) {
+    if (counts[i] >= 3) {
+      threeOfAKind = array.reduce((a, b) => a + b, 0); // Sum of all dice
+    }
+    if (counts[i] >= 4) {
+      fourOfAKind = array.reduce((a, b) => a + b, 0); // Sum of all dice
+    }
+    if (counts[i] === 5) {
+      yahtzee = 50;
+    }
+  }
+
+  if (counts.includes(3) && counts.includes(2)) {
+    fullHouse = 25;
+  }
+
+  // Check for small straight (1-2-3-4, 2-3-4-5, or 3-4-5-6)
+  if (
+    (count1 && count2 && count3 && count4) ||
+    (count2 && count3 && count4 && count5) ||
+    (count3 && count4 && count5 && count6)
+  ) {
+    smallStraight = 30;
+  }
+
+  // Check for long straight (1-2-3-4-5 or 2-3-4-5-6)
+  if (
+    (count1 && count2 && count3 && count4 && count5) ||
+    (count2 && count3 && count4 && count5 && count6)
+  ) {
+    longStraight = 40;
+  }
+
+  document.getElementById("scoreInputAces1").innerText = count1;
+  document.getElementById("scoreInputTwos1").innerText = count2;
+  document.getElementById("scoreInputThrees1").innerText = count3;
+  document.getElementById("scoreInputFours1").innerText = count4;
+  document.getElementById("scoreInputFives1").innerText = count5;
+  document.getElementById("scoreInputSixes1").innerText = count6;
+  document.getElementById("threeOfAKindScore").innerText = threeOfAKind;
+  document.getElementById("fourOfAKindScore").innerText = fourOfAKind;
+  document.getElementById("fullHouseScore").innerText = fullHouse;
+  document.getElementById("smallStraightScore").innerText = smallStraight;
+  document.getElementById("longStraightScore").innerText = longStraight;
+  document.getElementById("yahtzeeScore").innerText = yahtzee;
+  document.getElementById("chanceScore").innerText = chance;
 }
 
 function countThrows() {
@@ -45,7 +138,7 @@ function holdDices() {
           this.style = "border: none";
           heldDices[heldDicesNumber] = false;
         } else {
-          this.style = "border: 5px solid black";
+          this.style = "border: 5px solid #242038";
           heldDices[heldDicesNumber] = true;
         }
       }
