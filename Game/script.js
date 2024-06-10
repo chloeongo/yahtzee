@@ -26,44 +26,41 @@ function throwDices() {
     }
   }
   countThrows();
-  countTop(1, 2, 3, 4, 5, 6, rolledNumbers);
-  countThreeOfAKind();
+  countNumbers();
+  countThreeOfAKind(rolledNumbers);
+  printTopScores();
 }
 
-function countTop(number1, number2, number3, number4, number5, number6, array) {
-  let count1 = 0;
-  let count2 = 0;
-  let count3 = 0;
-  let count4 = 0;
-  let count5 = 0;
-  let count6 = 0;
+function countNumbers(number) {
+  let count = 0;
 
-  for (let i = 0; i < array.length; i++) {
-    if (array[i] === number1) {
-      count1++;
-    } else if (array[i] === number2) {
-      count2 = count2 + 2;
-    } else if (array[i] === number3) {
-      count3 = count3 + 3;
-    } else if (array[i] === number4) {
-      count4 = count4 + 4;
-    } else if (array[i] === number5) {
-      count5 = count5 + 5;
-    } else if (array[i] === number6) {
-      count6 = count6 + 6;
+  for (let i = 0; i < rolledNumbers.length; i++) {
+    if (rolledNumbers[i] === number) {
+      count++;
     }
   }
-  document.getElementById("scoreInputAces").innerText = count1;
-  document.getElementById("scoreInputTwos").innerText = count2;
-  document.getElementById("scoreInputThrees").innerText = count3;
-  document.getElementById("scoreInputFours").innerText = count4;
-  document.getElementById("scoreInputFives").innerText = count5;
-  document.getElementById("scoreInputSixes").innerText = count6;
+
+  return count;
+}
+
+function printTopScores() {
+  document.getElementById("scoreInputAces").innerText = countNumbers(
+    1,
+    rolledNumbers
+  );
+  document.getElementById("scoreInputTwos").innerText =
+    countNumbers(2, rolledNumbers) * 2;
+  document.getElementById("scoreInputThrees").innerText =
+    countNumbers(3, rolledNumbers) * 3;
+  document.getElementById("scoreInputFours").innerText =
+    countNumbers(4, rolledNumbers) * 4;
+  document.getElementById("scoreInputFives").innerText =
+    countNumbers(5, rolledNumbers) * 5;
+  document.getElementById("scoreInputSixes").innerText =
+    countNumbers(6, rolledNumbers) * 6;
 }
 
 function countThreeOfAKind(array) {
-  array.sort((a, b) => a - b);
-
   for (let i = 0; i <= array.length - 3; i++) {
     if (array[i] === array[i + 1] && array[i] === array[i + 2]) {
       return array[i] * 3;
@@ -72,6 +69,11 @@ function countThreeOfAKind(array) {
 
   return 0;
 }
+document.getElementById("threeOfAKindScore").innerText =
+  countThreeOfAKind(rolledNumbers);
+
+document.getElementById("threeOfAKindScore").innerText =
+  countThreeOfAKind(rolledNumbers);
 
 function countThrows() {
   if (throwCounter > 0) {
