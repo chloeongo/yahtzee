@@ -27,6 +27,7 @@ function throwDices() {
   }
   countThrows();
   countTop(1, 2, 3, 4, 5, 6, rolledNumbers);
+  countThreeOfAKind();
 }
 
 function countTop(number1, number2, number3, number4, number5, number6, array) {
@@ -52,30 +53,24 @@ function countTop(number1, number2, number3, number4, number5, number6, array) {
       count6 = count6 + 6;
     }
   }
-  document.getElementById("scoreInputAces1").innerText = count1;
-  document.getElementById("scoreInputTwos1").innerText = count2;
-  document.getElementById("scoreInputThrees1").innerText = count3;
-  document.getElementById("scoreInputFours1").innerText = count4;
-  document.getElementById("scoreInputFives1").innerText = count5;
-  document.getElementById("scoreInputSixes1").innerText = count6;
+  document.getElementById("scoreInputAces").innerText = count1;
+  document.getElementById("scoreInputTwos").innerText = count2;
+  document.getElementById("scoreInputThrees").innerText = count3;
+  document.getElementById("scoreInputFours").innerText = count4;
+  document.getElementById("scoreInputFives").innerText = count5;
+  document.getElementById("scoreInputSixes").innerText = count6;
 }
 
-function countLow() {
-  let threeOfAKind = 0;
-  let fourOfAKind = 0;
-  let fullHouse = 0;
-  let smallStraight = 0;
-  let longStraight = 0;
-  let yahtzee = 0;
-  let chance = array.reduce((a, b) => a + b, 0);
+function countThreeOfAKind(array) {
+  array.sort((a, b) => a - b);
 
-  document.getElementById("threeOfAKindScore").innerText = threeOfAKind;
-  document.getElementById("fourOfAKindScore").innerText = fourOfAKind;
-  document.getElementById("fullHouseScore").innerText = fullHouse;
-  document.getElementById("smallStraightScore").innerText = smallStraight;
-  document.getElementById("longStraightScore").innerText = longStraight;
-  document.getElementById("yahtzeeScore").innerText = yahtzee;
-  document.getElementById("chanceScore").innerText = chance;
+  for (let i = 0; i <= array.length - 3; i++) {
+    if (array[i] === array[i + 1] && array[i] === array[i + 2]) {
+      return array[i] * 3;
+    }
+  }
+
+  return 0;
 }
 
 function countThrows() {
@@ -84,6 +79,7 @@ function countThrows() {
     document.getElementById("amountOfThrows").innerText =
       "Throws left: " + throwCounter;
   }
+
   if (throwCounter === 0) {
     document.getElementById("diceBtn").removeEventListener("click", throwDices);
   }
@@ -91,13 +87,13 @@ function countThrows() {
 
 function holdDices() {
   function markDiceHeld(heldDicesNumber) {
-    return function (e) {
+    return function () {
       if (diceRolled) {
         if (heldDices[heldDicesNumber]) {
-          this.style = "border: none";
+          this.style.border = "none";
           heldDices[heldDicesNumber] = false;
         } else {
-          this.style = "border: 5px solid #242038";
+          this.style.border = "5px solid #242038";
           heldDices[heldDicesNumber] = true;
         }
       }
