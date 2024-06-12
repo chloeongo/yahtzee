@@ -77,6 +77,11 @@ button:hover {
   margin-bottom: 5rem;
 }
 
+.scoresheet,
+.clickScore {
+  cursor: pointer;
+}
+
 .scoreCapital {
   font-family: "Modak";
   font-weight: lighter;

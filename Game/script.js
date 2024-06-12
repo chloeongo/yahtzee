@@ -2,6 +2,8 @@ let throwCounter = 3;
 let diceRolled = false;
 const heldDices = [false, false, false, false, false];
 let rolledNumbers = [0, 0, 0, 0, 0];
+let pointsTop = [0, 0, 0, 0, 0, 0];
+let pointsBottom = [0, 0, 0, 0, 0, 0, 0];
 
 document.getElementById("diceBtn").addEventListener("click", throwDices);
 
@@ -67,9 +69,11 @@ function countThreeAndFour(array) {
   return { threeOfAKind, fourOfAKind };
 }
 
-function countFullHouse() {
+function countFullHouse(array) {
   const counts = {};
   let fullHouse = 0;
+  let three = false;
+  let two = false;
 
   for (let i = 0; i < array.length; i++) {
     const number = array[i];
@@ -81,15 +85,26 @@ function countFullHouse() {
   }
 
   for (const number in counts) {
-    if (counts[number] >= 3 && counts[i] === counts[i]) {
-      fullHouse = 25;
+    if (counts[number] >= 3) {
+      three = true;
+    } else if (counts[number] >= 2) {
+      two = true;
     }
+  }
+
+  if (three && two) {
+    fullHouse = 25;
   }
   return fullHouse;
 }
 
+function countSmallStraight(array) {
+  let smallStraight = 0;
+}
+
 function printScores() {
   const threeAndFourOfAKind = countThreeAndFour(rolledNumbers);
+
   document.getElementById("scoreInputAces").innerText = countNumbers(
     1,
     rolledNumbers
@@ -108,6 +123,7 @@ function printScores() {
     threeAndFourOfAKind.threeOfAKind;
   document.getElementById("fourOfAKindScore").innerText =
     threeAndFourOfAKind.fourOfAKind;
+
   document.getElementById("fullHouseScore").innerText =
     countFullHouse(rolledNumbers);
 }
