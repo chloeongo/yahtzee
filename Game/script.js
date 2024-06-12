@@ -26,9 +26,7 @@ function throwDices() {
     }
   }
   countThrows();
-  countNumbers();
-  countThreeOfAKind(rolledNumbers);
-  printTopScores();
+  printScores();
 }
 
 function countNumbers(number) {
@@ -43,7 +41,55 @@ function countNumbers(number) {
   return count;
 }
 
-function printTopScores() {
+function countThreeAndFour(array) {
+  const counts = {};
+  let threeOfAKind = 0;
+  let fourOfAKind = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    const number = array[i];
+    if (counts[number]) {
+      counts[number]++;
+    } else {
+      counts[number] = 1;
+    }
+  }
+
+  for (const number in counts) {
+    if (counts[number] >= 3) {
+      threeOfAKind = array.reduce((sum, current) => sum + current, 0);
+    }
+    if (counts[number] >= 4) {
+      fourOfAKind = array.reduce((sum, current) => sum + current, 0);
+    }
+  }
+
+  return { threeOfAKind, fourOfAKind };
+}
+
+function countFullHouse() {
+  const counts = {};
+  let fullHouse = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    const number = array[i];
+    if (counts[number]) {
+      counts[number]++;
+    } else {
+      counts[number] = 1;
+    }
+  }
+
+  for (const number in counts) {
+    if (counts[number] >= 3 && counts[i] === counts[i]) {
+      fullHouse = 25;
+    }
+  }
+  return fullHouse;
+}
+
+function printScores() {
+  const threeAndFourOfAKind = countThreeAndFour(rolledNumbers);
   document.getElementById("scoreInputAces").innerText = countNumbers(
     1,
     rolledNumbers
@@ -58,22 +104,13 @@ function printTopScores() {
     countNumbers(5, rolledNumbers) * 5;
   document.getElementById("scoreInputSixes").innerText =
     countNumbers(6, rolledNumbers) * 6;
+  document.getElementById("threeOfAKindScore").innerText =
+    threeAndFourOfAKind.threeOfAKind;
+  document.getElementById("fourOfAKindScore").innerText =
+    threeAndFourOfAKind.fourOfAKind;
+  document.getElementById("fullHouseScore").innerText =
+    countFullHouse(rolledNumbers);
 }
-
-function countThreeOfAKind(array) {
-  for (let i = 0; i <= array.length - 3; i++) {
-    if (array[i] === array[i + 1] && array[i] === array[i + 2]) {
-      return array[i] * 3;
-    }
-  }
-
-  return 0;
-}
-document.getElementById("threeOfAKindScore").innerText =
-  countThreeOfAKind(rolledNumbers);
-
-document.getElementById("threeOfAKindScore").innerText =
-  countThreeOfAKind(rolledNumbers);
 
 function countThrows() {
   if (throwCounter > 0) {
