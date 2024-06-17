@@ -31,11 +31,11 @@ function throwDices() {
   printScores();
 }
 
-function countNumbers(number) {
+function countNumbers(number, array) {
   let count = 0;
 
-  for (let i = 0; i < rolledNumbers.length; i++) {
-    if (rolledNumbers[i] === number) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === number) {
       count++;
     }
   }
@@ -99,7 +99,93 @@ function countFullHouse(array) {
 }
 
 function countSmallStraight(array) {
+  const counts = {};
+  const smallStraightCombinations = [
+    [1, 2, 3, 4],
+    [2, 3, 4, 5],
+    [3, 4, 5, 6],
+  ];
   let smallStraight = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    const number = array[i];
+    if (counts[number]) {
+      counts[number]++;
+    } else {
+      counts[number] = 1;
+    }
+  }
+
+  for (const number of smallStraightCombinations) {
+    if (number.every((num) => array.includes(num))) smallStraight = 30;
+  }
+
+  return smallStraight;
+}
+
+function countLargeStraight(array) {
+  const counts = {};
+  const largeStraightCombinations = [
+    [1, 2, 3, 4, 5],
+    [2, 3, 4, 5, 6],
+  ];
+  let largeStraight = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    const number = array[i];
+    if (counts[number]) {
+      counts[number]++;
+    } else {
+      counts[number] = 1;
+    }
+  }
+
+  for (const number of largeStraightCombinations) {
+    if (number.every((num) => array.includes(num))) largeStraight = 40;
+  }
+  return largeStraight;
+}
+
+function countYahtzee(array) {
+  const counts = {};
+  let yahtzee = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    const number = array[i];
+    if (counts[number]) {
+      counts[number]++;
+    } else {
+      counts[number] = 1;
+    }
+  }
+
+  for (const number in counts) {
+    if (counts[number] >= 5) {
+      yahtzee = 50;
+    }
+  }
+
+  return yahtzee;
+}
+
+function countChance(array) {
+  const counts = {};
+  let chance = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    const number = array[i];
+    if (counts[number]) {
+      counts[number]++;
+    } else {
+      counts[number] = 1;
+    }
+  }
+
+  for (const number in counts) {
+    chance = array.reduce((sum, current) => sum + current, 0);
+  }
+
+  return chance;
 }
 
 function printScores() {
@@ -126,6 +212,13 @@ function printScores() {
 
   document.getElementById("fullHouseScore").innerText =
     countFullHouse(rolledNumbers);
+  document.getElementById("smallStraightScore").innerText =
+    countSmallStraight(rolledNumbers);
+  document.getElementById("largeStraightScore").innerText =
+    countLargeStraight(rolledNumbers);
+  document.getElementById("yahtzeeScore").innerText =
+    countYahtzee(rolledNumbers);
+  document.getElementById("chanceScore").innerText = countChance(rolledNumbers);
 }
 
 function countThrows() {
@@ -136,7 +229,6 @@ function countThrows() {
   }
 
   if (throwCounter === 0) {
-    document.getElementById("diceBtn").removeEventListener("click", throwDices);
   }
 }
 
