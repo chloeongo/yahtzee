@@ -99,3 +99,7 @@ td {
   text-align: left;
   border: 7px solid #ffc457;
 }
+
+.heldScore {
+  color: #d81159;
+}

@@ -226,17 +226,18 @@ function countNumbers(number) {
 
   return count;
 }
-  document.getElementById("scoreInputAces1").innerText = countNumbers(
-    1,
-    rolledNumbers
-  );
-  document.getElementById("scoreInputTwos1").innerText =
-    countNumbers(2, rolledNumbers) * 2;
-  document.getElementById("scoreInputThrees1").innerText =
-    countNumbers(3, rolledNumbers) * 3;
-  document.getElementById("scoreInputFours1").innerText =
-    countNumbers(4, rolledNumbers) * 4;
-  document.getElementById("scoreInputFives1").innerText =
-    countNumbers(5, rolledNumbers) * 5;
-  document.getElementById("scoreInputSixes1").innerText =
-    countNumbers(6, rolledNumbers) * 6;
+
+
+        fourOfAKind = array.reduce((sum, current) => sum + current, 0); > for loop maken en methode maken
+
+        function holdScores() {
+  if (diceRolled) {
+    const diceScore = document.getElementById(this.id);
+
+    if (!diceScore.classList.contains("heldScore")) {
+      diceScore.classList.add("heldScore");
+    } else {
+      diceScore.classList.remove("heldScore");
+    }
+  }
+}
