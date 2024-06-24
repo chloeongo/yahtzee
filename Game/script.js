@@ -3,6 +3,7 @@ let diceRolled = false;
 const heldDices = [false, false, false, false, false];
 let rolledNumbers = [0, 0, 0, 0, 0];
 let scoreHeld = false;
+let bonus = false;
 
 document.getElementById("diceBtn").addEventListener("click", throwDices);
 document.getElementById("next").addEventListener("click", nextTurn);
@@ -120,12 +121,12 @@ function findCombinations(array) {
     if (count >= 5) {
       yahtzee = 50;
     }
-    if (count >= 2) {
-      pair = true;
+    if (count === 2) {
+      two = true;
     }
   }
 
-  if (three && pair) {
+  if (three && two) {
     fullHouse = 25;
   }
 
@@ -202,7 +203,62 @@ function holdScores() {
       document.getElementById("amountOfThrows").innerText = "Throws left: 0";
       throwCounter = 0;
     }
+    calcTotal();
   }
+}
+
+function calcTotal() {
+  let totalScore = 0;
+  let scoreTop = 0;
+  let scoreLow = 0;
+
+  const scoreElementsTop = [
+    "scoreInputAces",
+    "scoreInputTwos",
+    "scoreInputThrees",
+    "scoreInputFours",
+    "scoreInputFives",
+    "scoreInputSixes",
+  ];
+
+  const scoreElementsLow = [
+    "threeOfAKindScore",
+    "fourOfAKindScore",
+    "fullHouseScore",
+    "smallStraightScore",
+    "largeStraightScore",
+    "yahtzeeScore",
+    "chanceScore",
+  ];
+
+  for (const scoreElementId of scoreElementsTop) {
+    const scoreElement = document.getElementById(scoreElementId);
+    if (scoreElement.classList.contains("heldScore")) {
+      scoreTop += parseInt(scoreElement.innerText);
+    }
+  }
+
+  if (scoreTop >= 3) {
+    bonus = true;
+  }
+
+  for (const scoreElementId of scoreElementsLow) {
+    const scoreElement = document.getElementById(scoreElementId);
+    if (scoreElement.classList.contains("heldScore")) {
+      scoreLow += parseInt(scoreElement.innerText);
+    }
+  }
+
+  if (bonus) {
+    totalScore += 35;
+  }
+
+  totalScore += scoreTop + scoreLow;
+
+  document.getElementById("bonusScore").innerText = "35";
+  document.getElementById("topTotalScore").innerText = scoreTop;
+  document.getElementById("totalScore").innerText = totalScore;
+  return totalScore;
 }
 
 function printScores() {
@@ -290,6 +346,8 @@ function printScores() {
     document.getElementById("chanceScore").innerText = scores.chance;
   }
 }
+
+function endGame() {}
 
 function nextTurn() {
   if (throwCounter === 0) {

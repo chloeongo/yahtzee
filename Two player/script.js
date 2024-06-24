@@ -2,8 +2,7 @@ let throwCounter = 3;
 let diceRolled = false;
 const heldDices = [false, false, false, false, false];
 let rolledNumbers = [0, 0, 0, 0, 0];
-let pointsTop = [0, 0, 0, 0, 0, 0];
-let pointsBottom = [0, 0, 0, 0, 0, 0, 0];
+let scoreHeld = false;
 
 document.getElementById("diceBtn").addEventListener("click", throwDices);
 document.getElementById("next").addEventListener("click", nextTurn);
@@ -94,6 +93,7 @@ function findCombinations(array) {
   let yahtzee = 0;
   let chance = 0;
   let three = false;
+  let two = false;
 
   for (let i = 0; i < array.length; i++) {
     chance += array[i];
@@ -109,26 +109,32 @@ function findCombinations(array) {
   }
 
   for (const number in counts) {
-    if (counts[number] >= 3) {
-      threeOfAKind = chance; //chance telt alles op line 97
+    const count = counts[number];
+    if (count >= 3) {
+      threeOfAKind = chance;
       three = true;
     }
-    if (counts[number] >= 4) {
+    if (count >= 4) {
       fourOfAKind = chance;
     }
-    if (counts[number] >= 5) {
+    if (count >= 5) {
       yahtzee = 50;
     }
-    if (three && counts[number] >= 2) {
-      fullHouse = 25;
+    if (count >= 2) {
+      pair = true;
     }
   }
 
-  for (const number of smallStraightCombinations) {
-    if (number.every((num) => array.includes(num))) smallStraight = 30;
+  if (three && pair) {
+    fullHouse = 25;
   }
-  for (const number of largeStraightCombinations) {
-    if (number.every((num) => array.includes(num))) largeStraight = 40;
+
+  for (const combination of smallStraightCombinations) {
+    if (combination.every((num) => array.includes(num))) smallStraight = 30;
+  }
+
+  for (const combination of largeStraightCombinations) {
+    if (combination.every((num) => array.includes(num))) largeStraight = 40;
   }
 
   return {
@@ -148,62 +154,141 @@ function holdScores() {
 
     if (!diceScore.classList.contains("heldScore")) {
       diceScore.classList.add("heldScore");
-      storeHeldScores(this.id);
-    } else {
-      diceScore.classList.remove("heldScore");
+      scoreHeld = true;
+      document
+        .getElementById("scoreInputAces")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("scoreInputTwos")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("scoreInputThrees")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("scoreInputFours")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("scoreInputFives")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("scoreInputSixes")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("threeOfAKindScore")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("fourOfAKindScore")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("fullHouseScore")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("smallStraightScore")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("largeStraightScore")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("yahtzeeScore")
+        .removeEventListener("click", holdScores);
+      document
+        .getElementById("chanceScore")
+        .removeEventListener("click", holdScores);
     }
-  }
-}
-
-function storeHeldScores() {
-  const scores = findCombinations(rolledNumbers);
-
-  if (document.querySelector(".heldScore")) {
-    pointsTop[0] = countNumbers(1, rolledNumbers);
-    pointsTop[1] = countNumbers(2, rolledNumbers) * 2;
-    pointsTop[2] = countNumbers(3, rolledNumbers) * 3;
-    pointsTop[3] = countNumbers(4, rolledNumbers) * 4;
-    pointsTop[4] = countNumbers(5, rolledNumbers) * 5;
-    pointsTop[5] = countNumbers(6, rolledNumbers) * 6;
-    console.log(pointsTop);
-    pointsBottom[0] = scores.threeOfAKind;
-    pointsBottom[1] = scores.fourOfAKind;
-    pointsBottom[2] = scores.fullHouse;
-    pointsBottom[3] = scores.smallStraight;
-    pointsBottom[4] = scores.largeStraight;
-    pointsBottom[5] = scores.yahtzee;
-    pointsBottom[6] = scores.chance;
-    console.log(pointsBottom);
+    if (scoreHeld) {
+      document
+        .getElementById("diceBtn")
+        .removeEventListener("click", throwDices);
+      document.getElementById("amountOfThrows").innerText = "Throws left: 0";
+      throwCounter = 0;
+    }
   }
 }
 
 function printScores() {
   const scores = findCombinations(rolledNumbers);
 
-  document.getElementById("scoreInputAces").innerText = countNumbers(
-    1,
-    rolledNumbers
-  );
-  document.getElementById("scoreInputTwos").innerText =
-    countNumbers(2, rolledNumbers) * 2;
-  document.getElementById("scoreInputThrees").innerText =
-    countNumbers(3, rolledNumbers) * 3;
-  document.getElementById("scoreInputFours").innerText =
-    countNumbers(4, rolledNumbers) * 4;
-  document.getElementById("scoreInputFives").innerText =
-    countNumbers(5, rolledNumbers) * 5;
-  document.getElementById("scoreInputSixes").innerText =
-    countNumbers(6, rolledNumbers) * 6;
+  if (
+    !document.getElementById("scoreInputAces").classList.contains("heldScore")
+  ) {
+    document.getElementById("scoreInputAces").innerText = countNumbers(
+      1,
+      rolledNumbers
+    );
+  }
+  if (
+    !document.getElementById("scoreInputTwos").classList.contains("heldScore")
+  ) {
+    document.getElementById("scoreInputTwos").innerText =
+      countNumbers(2, rolledNumbers) * 2;
+  }
+  if (
+    !document.getElementById("scoreInputThrees").classList.contains("heldScore")
+  ) {
+    document.getElementById("scoreInputThrees").innerText =
+      countNumbers(3, rolledNumbers) * 3;
+  }
+  if (
+    !document.getElementById("scoreInputFours").classList.contains("heldScore")
+  ) {
+    document.getElementById("scoreInputFours").innerText =
+      countNumbers(4, rolledNumbers) * 4;
+  }
+  if (
+    !document.getElementById("scoreInputFives").classList.contains("heldScore")
+  ) {
+    document.getElementById("scoreInputFives").innerText =
+      countNumbers(5, rolledNumbers) * 5;
+  }
+  if (
+    !document.getElementById("scoreInputSixes").classList.contains("heldScore")
+  ) {
+    document.getElementById("scoreInputSixes").innerText =
+      countNumbers(6, rolledNumbers) * 6;
+  }
 
-  document.getElementById("threeOfAKindScore").innerText = scores.threeOfAKind;
-  document.getElementById("fourOfAKindScore").innerText = scores.fourOfAKind;
-  document.getElementById("fullHouseScore").innerText = scores.fullHouse;
-  document.getElementById("smallStraightScore").innerText =
-    scores.smallStraight;
-  document.getElementById("largeStraightScore").innerText =
-    scores.largeStraight;
-  document.getElementById("yahtzeeScore").innerText = scores.yahtzee;
-  document.getElementById("chanceScore").innerText = scores.chance;
+  if (
+    !document
+      .getElementById("threeOfAKindScore")
+      .classList.contains("heldScore")
+  ) {
+    document.getElementById("threeOfAKindScore").innerText =
+      scores.threeOfAKind;
+  }
+  if (
+    !document.getElementById("fourOfAKindScore").classList.contains("heldScore")
+  ) {
+    document.getElementById("fourOfAKindScore").innerText = scores.fourOfAKind;
+  }
+  if (
+    !document.getElementById("fullHouseScore").classList.contains("heldScore")
+  ) {
+    document.getElementById("fullHouseScore").innerText = scores.fullHouse;
+  }
+  if (
+    !document
+      .getElementById("smallStraightScore")
+      .classList.contains("heldScore")
+  ) {
+    document.getElementById("smallStraightScore").innerText =
+      scores.smallStraight;
+  }
+  if (
+    !document
+      .getElementById("largeStraightScore")
+      .classList.contains("heldScore")
+  ) {
+    document.getElementById("largeStraightScore").innerText =
+      scores.largeStraight;
+  }
+  if (
+    !document.getElementById("yahtzeeScore").classList.contains("heldScore")
+  ) {
+    document.getElementById("yahtzeeScore").innerText = scores.yahtzee;
+  }
+  if (!document.getElementById("chanceScore").classList.contains("heldScore")) {
+    document.getElementById("chanceScore").innerText = scores.chance;
+  }
 }
 
 function nextTurn() {
@@ -212,6 +297,46 @@ function nextTurn() {
     diceRolled = false;
     rolledNumbers.fill(0);
     heldDices.fill(false);
+
+    document
+      .getElementById("scoreInputAces")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("scoreInputTwos")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("scoreInputThrees")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("scoreInputFours")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("scoreInputFives")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("scoreInputSixes")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("threeOfAKindScore")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("fourOfAKindScore")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("fullHouseScore")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("smallStraightScore")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("largeStraightScore")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("yahtzeeScore")
+      .addEventListener("click", holdScores);
+    document
+      .getElementById("chanceScore")
+      .addEventListener("click", holdScores);
 
     const defaultDiceImage = "../images/1.png";
     for (let i = 0; i < 5; i++) {
@@ -229,13 +354,12 @@ function nextTurn() {
 }
 
 function countThrows() {
-  if (throwCounter > 0) {
+  if (throwCounter === 0) {
+    document.getElementById("diceBtn").removeEventListener("click", throwDices);
+  } else {
     throwCounter--;
     document.getElementById("amountOfThrows").innerText =
       "Throws left: " + throwCounter;
-  }
-  if (throwCounter === 0) {
-    document.getElementById("diceBtn").removeEventListener("click", throwDices);
   }
 }
 
