@@ -3,53 +3,28 @@ let diceRolled = false;
 const heldDices = [false, false, false, false, false];
 let rolledNumbers = [0, 0, 0, 0, 0];
 let scoreHeld = false;
-let bonus = false;
+let gameEnd = false;
 
-document.getElementById("diceBtn").addEventListener("click", throwDices);
-document.getElementById("next").addEventListener("click", nextTurn);
-document.getElementById("scoreInputAces").addEventListener("click", holdScores);
-document.getElementById("scoreInputTwos").addEventListener("click", holdScores);
-document
-  .getElementById("scoreInputThrees")
-  .addEventListener("click", holdScores);
-document
-  .getElementById("scoreInputFours")
-  .addEventListener("click", holdScores);
-document
-  .getElementById("scoreInputFives")
-  .addEventListener("click", holdScores);
-document
-  .getElementById("scoreInputSixes")
-  .addEventListener("click", holdScores);
-document.getElementById("scoreInputToak").addEventListener("click", holdScores);
-document.getElementById("scoreInputFoak").addEventListener("click", holdScores);
-document
-  .getElementById("scoreInputFullHouse")
-  .addEventListener("click", holdScores);
-document.getElementById("scoreInputSs").addEventListener("click", holdScores);
-document.getElementById("scoreInputLs").addEventListener("click", holdScores);
-document
-  .getElementById("scoreInputYahtzee")
-  .addEventListener("click", holdScores);
-document
-  .getElementById("scoreInputChance")
-  .addEventListener("click", holdScores);
-
+//voegt eventlisteners van de score input toe
 function addEventListeners() {
-  const scoreElements = document.querySelectorAll(".scoreInput");
-  scoreElements.forEach((element) => {
-    if (!element.classList.contains("heldScore")) {
-      element.addEventListener("click", holdScores);
-    }
-  });
+  const scoreElements = document.getElementsByClassName("scoreInput");
+
+  for (let i = 0; i < scoreElements.length; i++) {
+    scoreElements[i].addEventListener("click", holdScores);
+  }
 }
 
 function removeScoreEventListeners() {
-  const scoreElements = document.querySelectorAll(".scoreInput");
-  scoreElements.forEach((element) => {
-    element.removeEventListener("click", holdScores);
-  });
+  const scoreElements = document.getElementsByClassName("scoreInput");
+  for (let i = 0; i < scoreElements.length; i++) {
+    scoreElements[i].removeEventListener("click", holdScores);
+  }
 }
+
+addEventListeners();
+document.getElementById("diceBtn").addEventListener("click", throwDices);
+document.getElementById("next").addEventListener("click", nextTurn);
+document.getElementById("topTotalScore").addEventListener("click", checkEnd);
 
 function throwDices() {
   diceRolled = true;
@@ -170,16 +145,18 @@ function holdScores() {
     if (!diceScore.classList.contains("heldScore")) {
       diceScore.classList.add("heldScore");
       scoreHeld = true;
-
-      removeScoreEventListeners();
     }
     if (scoreHeld) {
       document
         .getElementById("diceBtn")
         .removeEventListener("click", throwDices);
       document.getElementById("amountOfThrows").innerText = "Throws left: 0";
+      removeScoreEventListeners();
       throwCounter = 0;
+    } else {
+      document.getElementById("diceBtn").addEventListener("click", throwDices);
     }
+
     calcTotal();
   }
 }
@@ -216,7 +193,6 @@ function calcTotal() {
   }
 
   if (scoreTop >= 63) {
-    bonus = true;
     document.getElementById("bonusScore").innerText = "35";
     scoreTop += 35;
   }
@@ -251,7 +227,6 @@ function printScores() {
   updateScoreIfNotHeld("scoreInputFours", countNumbers(4, rolledNumbers) * 4);
   updateScoreIfNotHeld("scoreInputFives", countNumbers(5, rolledNumbers) * 5);
   updateScoreIfNotHeld("scoreInputSixes", countNumbers(6, rolledNumbers) * 6);
-
   updateScoreIfNotHeld("scoreInputToak", scores.threeOfAKind);
   updateScoreIfNotHeld("scoreInputFoak", scores.fourOfAKind);
   updateScoreIfNotHeld("scoreInputFullHouse", scores.fullHouse);
@@ -261,17 +236,21 @@ function printScores() {
   updateScoreIfNotHeld("scoreInputChance", scores.chance);
 }
 
-function endGame() {
-  window.alert("Game Over!");
+function checkEnd() {
+  gameEnd = true;
 }
 
 function nextTurn() {
+  if (gameEnd) {
+    window.alert("Game Over!");
+    throwCounter = 0;
+  }
   if (throwCounter === 0) {
     throwCounter = 3;
     diceRolled = false;
+    scoreHeld = false;
     rolledNumbers.fill(0);
     heldDices.fill(false);
-
     addEventListeners();
 
     const defaultDiceImage = "../images/1.png";
