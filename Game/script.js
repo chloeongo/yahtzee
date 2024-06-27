@@ -184,7 +184,7 @@ function calcTotal() {
     "scoreInputYahtzee",
     "scoreInputChance",
   ];
-
+  //telt de punten van de single punten op
   for (const scoreElementId of scoreElementsTop) {
     const scoreElement = document.getElementById(scoreElementId);
     if (scoreElement.classList.contains("heldScore")) {
@@ -192,7 +192,8 @@ function calcTotal() {
     }
   }
 
-  if (scoreTop >= 63) {
+  if (scoreTop >= 42) {
+    //bij >= 42 bonus punten ipv 63
     document.getElementById("bonusScore").innerText = "35";
     scoreTop += 35;
   }
@@ -237,18 +238,30 @@ function printScores() {
 }
 
 function checkEnd() {
-  gameEnd = true;
+  const scoreElements = document.getElementsByClassName("scoreInput");
+  let allScoresHeld = true;
+
+  for (let i = 0; i < scoreElements.length; i++) {
+    if (!scoreElements[i].classList.contains("heldScore")) {
+      allScoresHeld = false;
+    }
+  }
+
+  gameEnd = allScoresHeld;
 }
 
 function nextTurn() {
+  checkEnd();
+
   if (gameEnd) {
     window.alert("Game Over!");
     throwCounter = 0;
   }
-  if (throwCounter === 0) {
+  if (throwCounter === 0 && scoreHeld) {
     throwCounter = 3;
     diceRolled = false;
     scoreHeld = false;
+
     rolledNumbers.fill(0);
     heldDices.fill(false);
     addEventListeners();
@@ -257,14 +270,16 @@ function nextTurn() {
     for (let i = 0; i < 5; i++) {
       const diceImgElement = document.getElementById("diceImg" + (i + 1));
       diceImgElement.style.border = "none";
-      diceImgElement.src = defaultDiceImage; //zet alle dobbelsteen plaatjes weer op 1
+      diceImgElement.src = defaultDiceImage; // Reset all dice images
     }
 
     document.getElementById("amountOfThrows").innerText =
       "Throws left: " + throwCounter;
     document.getElementById("diceBtn").addEventListener("click", throwDices);
   } else if (throwCounter !== 0) {
-    window.alert("You still have throws left or still have to select a score!");
+    window.alert("You still have throws left!");
+  } else if (!scoreHeld) {
+    window.alert("You still have to select a score!");
   }
 }
 
