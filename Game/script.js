@@ -5,6 +5,11 @@ let rolledNumbers = [0, 0, 0, 0, 0];
 let scoreHeld = false;
 let gameEnd = false;
 
+addEventListeners();
+document.getElementById("diceBtn").addEventListener("click", throwDices);
+document.getElementById("next").addEventListener("click", nextTurn);
+document.getElementById("topTotalScore").addEventListener("click", checkEnd);
+
 //voegt eventlisteners van de score input toe
 function addEventListeners() {
   const scoreElements = document.getElementsByClassName("scoreInput");
@@ -21,40 +26,38 @@ function removeScoreEventListeners() {
   }
 }
 
-addEventListeners();
-document.getElementById("diceBtn").addEventListener("click", throwDices);
-document.getElementById("next").addEventListener("click", nextTurn);
-document.getElementById("topTotalScore").addEventListener("click", checkEnd);
-
 function throwDices() {
-  diceRolled = true;
+  if (throwCounter > 0) {
+    diceRolled = true;
+    const dices = [
+      { number: 1, image: "../images/1.png" },
+      { number: 2, image: "../images/2.png" },
+      { number: 3, image: "../images/3.png" },
+      { number: 4, image: "../images/4.png" },
+      { number: 5, image: "../images/5.png" },
+      { number: 6, image: "../images/6.png" },
+    ];
 
-  const dices = [
-    { number: 1, image: "../images/1.png" },
-    { number: 2, image: "../images/2.png" },
-    { number: 3, image: "../images/3.png" },
-    { number: 4, image: "../images/4.png" },
-    { number: 5, image: "../images/5.png" },
-    { number: 6, image: "../images/6.png" },
-  ];
-
-  for (let i = 0; i < 5; i++) {
-    if (!heldDices[i]) {
-      const randomIndex = Math.floor(Math.random() * dices.length);
-      const diceImgElement = document.getElementById("diceImg" + (i + 1));
-      diceImgElement.src = dices[randomIndex].image;
-      rolledNumbers[i] = dices[randomIndex].number;
+    for (let i = 0; i < 5; i++) {
+      if (!heldDices[i]) {
+        const randomIndex = Math.floor(Math.random() * dices.length);
+        const diceImgElement = document.getElementById("diceImg" + (i + 1));
+        diceImgElement.src = dices[randomIndex].image;
+        rolledNumbers[i] = dices[randomIndex].number;
+      }
     }
+    countThrows();
+    printScores();
+  } else if (throwCounter === 0) {
+    window.alert("You must select next round!");
   }
-  countThrows();
-  printScores();
 }
 
-function countNumbers(number, array) {
+function countNumbers(diceNumber, rolledNumbers) {
   let count = 0;
 
-  for (let i = 0; i < array.length; i++) {
-    if (array[i] === number) {
+  for (let i = 0; i < rolledNumbers.length; i++) {
+    if (rolledNumbers[i] === diceNumber) {
       count++;
     }
   }
@@ -62,7 +65,7 @@ function countNumbers(number, array) {
   return count;
 }
 
-function findCombinations(array) {
+function findCombinations(rolledNumbers) {
   const counts = {};
   const smallStraightCombinations = [
     //alle combinaties van small straight
@@ -85,17 +88,18 @@ function findCombinations(array) {
   let three = false;
   let two = false;
 
-  for (let i = 0; i < array.length; i++) {
-    chance += array[i];
+  // telt hoevaak een getal is gerolt
+  for (let i = 0; i < rolledNumbers.length; i++) {
+    const diceNumber = rolledNumbers[i];
+    if (counts[diceNumber]) {
+      counts[diceNumber]++;
+    } else {
+      counts[diceNumber] = 1;
+    }
   }
 
-  for (let i = 0; i < array.length; i++) {
-    const number = array[i];
-    if (counts[number]) {
-      counts[number]++;
-    } else {
-      counts[number] = 1;
-    }
+  for (let i = 0; i < rolledNumbers.length; i++) {
+    chance += rolledNumbers[i];
   }
 
   for (const number in counts) {
@@ -120,11 +124,23 @@ function findCombinations(array) {
   }
 
   for (const combination of smallStraightCombinations) {
-    if (combination.every((num) => array.includes(num))) smallStraight = 30;
+    if (
+      combination.every(function (diceNumber) {
+        return rolledNumbers.includes(diceNumber);
+      })
+    ) {
+      smallStraight = 30;
+    }
   }
 
   for (const combination of largeStraightCombinations) {
-    if (combination.every((num) => array.includes(num))) largeStraight = 40;
+    if (
+      combination.every(function (diceNumber) {
+        return rolledNumbers.includes(diceNumber);
+      })
+    ) {
+      largeStraight = 40;
+    }
   }
 
   return {
@@ -153,8 +169,6 @@ function holdScores() {
       document.getElementById("amountOfThrows").innerText = "Throws left: 0";
       removeScoreEventListeners();
       throwCounter = 0;
-    } else {
-      document.getElementById("diceBtn").addEventListener("click", throwDices);
     }
 
     calcTotal();
@@ -185,10 +199,10 @@ function calcTotal() {
     "scoreInputChance",
   ];
   //telt de punten van de single punten op
-  for (const scoreElementId of scoreElementsTop) {
-    const scoreElement = document.getElementById(scoreElementId);
-    if (scoreElement.classList.contains("heldScore")) {
-      scoreTop += parseInt(scoreElement.innerText);
+  for (const scoreInputId of scoreElementsTop) {
+    const scoreInput = document.getElementById(scoreInputId);
+    if (scoreInput.classList.contains("heldScore")) {
+      scoreTop += parseInt(scoreInput.innerText);
     }
   }
 
@@ -198,10 +212,10 @@ function calcTotal() {
     scoreTop += 35;
   }
 
-  for (const scoreElementId of scoreElementsLow) {
-    const scoreElement = document.getElementById(scoreElementId);
-    if (scoreElement.classList.contains("heldScore")) {
-      scoreLow += parseInt(scoreElement.innerText);
+  for (const scoreInputId of scoreElementsLow) {
+    const scoreInput = document.getElementById(scoreInputId);
+    if (scoreInput.classList.contains("heldScore")) {
+      scoreLow += parseInt(scoreInput.innerText);
     }
   }
 
@@ -210,13 +224,6 @@ function calcTotal() {
   document.getElementById("topTotalScore").innerText = scoreTop;
   document.getElementById("totalScore").innerText = totalScore;
   return totalScore;
-}
-
-function updateScoreIfNotHeld(elementId, score) {
-  const scoreElement = document.getElementById(elementId);
-  if (!scoreElement.classList.contains("heldScore")) {
-    scoreElement.innerText = score;
-  }
 }
 
 function printScores() {
@@ -235,6 +242,13 @@ function printScores() {
   updateScoreIfNotHeld("scoreInputLs", scores.largeStraight);
   updateScoreIfNotHeld("scoreInputYahtzee", scores.yahtzee);
   updateScoreIfNotHeld("scoreInputChance", scores.chance);
+}
+
+function updateScoreIfNotHeld(scoreInputId, score) {
+  const scoreElement = document.getElementById(scoreInputId);
+  if (!scoreElement.classList.contains("heldScore")) {
+    scoreElement.innerText = score;
+  }
 }
 
 function checkEnd() {
@@ -270,7 +284,7 @@ function nextTurn() {
     for (let i = 0; i < 5; i++) {
       const diceImgElement = document.getElementById("diceImg" + (i + 1));
       diceImgElement.style.border = "none";
-      diceImgElement.src = defaultDiceImage; // Reset all dice images
+      diceImgElement.src = defaultDiceImage; // Reset alle dice images
     }
 
     document.getElementById("amountOfThrows").innerText =
@@ -279,18 +293,14 @@ function nextTurn() {
   } else if (throwCounter !== 0) {
     window.alert("You still have throws left!");
   } else if (!scoreHeld) {
-    window.alert("You still have to select a score!");
+    window.alert("You must select a score!");
   }
 }
 
 function countThrows() {
-  if (throwCounter === 0) {
-    document.getElementById("diceBtn").removeEventListener("click", throwDices);
-  } else {
-    throwCounter--;
-    document.getElementById("amountOfThrows").innerText =
-      "Throws left: " + throwCounter;
-  }
+  throwCounter--;
+  document.getElementById("amountOfThrows").innerText =
+    "Throws left: " + throwCounter;
 }
 
 function holdDices() {
