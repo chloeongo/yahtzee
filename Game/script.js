@@ -3,7 +3,7 @@ let diceRolled = false;
 const heldDices = [false, false, false, false, false];
 let rolledNumbers = [0, 0, 0, 0, 0];
 let scoreHeld = false;
-let gameEnd = false;
+let allScoresHeld = true;
 
 addEventListeners();
 document.getElementById("diceBtn").addEventListener("click", throwDices);
@@ -170,7 +170,6 @@ function holdScores() {
       removeScoreEventListeners();
       throwCounter = 0;
     }
-
     calcTotal();
   }
 }
@@ -199,8 +198,8 @@ function calcTotal() {
     "scoreInputChance",
   ];
   //telt de punten van de single punten op
-  for (const scoreInputId of scoreElementsTop) {
-    const scoreInput = document.getElementById(scoreInputId);
+  for (const scoreInputs of scoreElementsTop) {
+    const scoreInput = document.getElementById(scoreInputs);
     if (scoreInput.classList.contains("heldScore")) {
       scoreTop += parseInt(scoreInput.innerText);
     }
@@ -212,8 +211,8 @@ function calcTotal() {
     scoreTop += 35;
   }
 
-  for (const scoreInputId of scoreElementsLow) {
-    const scoreInput = document.getElementById(scoreInputId);
+  for (const scoreInputs of scoreElementsLow) {
+    const scoreInput = document.getElementById(scoreInputs);
     if (scoreInput.classList.contains("heldScore")) {
       scoreLow += parseInt(scoreInput.innerText);
     }
@@ -252,22 +251,19 @@ function updateScoreIfNotHeld(scoreInputId, score) {
 }
 
 function checkEnd() {
-  const scoreElements = document.getElementsByClassName("scoreInput");
-  let allScoresHeld = true;
+  const scoreInputs = document.getElementsByClassName("scoreInput");
 
-  for (let i = 0; i < scoreElements.length; i++) {
-    if (!scoreElements[i].classList.contains("heldScore")) {
+  for (let i = 0; i < scoreInputs.length; i++) {
+    if (!scoreInputs[i].classList.contains("heldScore")) {
       allScoresHeld = false;
     }
   }
-
-  gameEnd = allScoresHeld;
 }
 
 function nextTurn() {
   checkEnd();
 
-  if (gameEnd) {
+  if (allScoresHeld) {
     window.alert("Game Over!");
     throwCounter = 0;
   }
