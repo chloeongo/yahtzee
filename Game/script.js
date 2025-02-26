@@ -78,6 +78,7 @@ function findCombinations(rolledNumbers) {
     [1, 2, 3, 4, 5],
     [2, 3, 4, 5, 6],
   ];
+  
   let threeOfAKind = 0;
   let fourOfAKind = 0;
   let fullHouse = 0;
@@ -180,6 +181,7 @@ function calcTotal() {
   let scoreLow = 0;
 
   const scoreElementsTop = [
+    //score input van single punten zoals 1
     "scoreInputAces",
     "scoreInputTwos",
     "scoreInputThrees",
@@ -189,6 +191,7 @@ function calcTotal() {
   ];
 
   const scoreElementsLow = [
+    //score input van combinerende punten zoals fullhouse
     "scoreInputToak",
     "scoreInputFoak",
     "scoreInputFullHouse",
@@ -204,9 +207,8 @@ function calcTotal() {
       scoreTop += parseInt(scoreInput.innerText);
     }
   }
-
-  if (scoreTop >= 42) {
-    //bij >= 42 bonus punten ipv 63
+  //berekent de bonusscore bij toepassing
+  if (scoreTop >= 63) {
     document.getElementById("bonusScore").innerText = "35";
     scoreTop += 35;
   }
